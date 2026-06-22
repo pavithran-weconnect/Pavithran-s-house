@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pavithran's House | Builder Requirements Presentation</title>
+    <meta
+      name="description"
+      content="Builder requirements presentation for Pavithran's House: supermarket frontage, private residence, basement parking, smart home systems, interiors, terrace and services."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="ambient-lines" aria-hidden="true"></div>
+    <div class="scroll-progress" id="scrollProgress" data-print-hidden></div>
+    <header class="site-header" data-print-hidden>
+      <a class="brand" href="#top" aria-label="Pavithran's House">
+        <span class="brand-mark">PH</span>
+        <span>Pavithran's House</span>
+      </a>
+      <nav class="nav-links" aria-label="Presentation sections">
+        <a href="#intent">Intent</a>
+        <a href="#rendering">Concept</a>
+        <a href="#floors">Floors</a>
+        <a href="#systems">Systems</a>
+        <a href="#budget">Budget</a>
+        <a href="#gallery">Gallery</a>
+      </nav>
+      <div class="theme-switcher" aria-label="Theme management">
+        <button class="theme-dot is-active" type="button" data-theme="ivory" aria-label="Ivory stone theme"></button>
+        <button class="theme-dot" type="button" data-theme="sage" aria-label="Sage garden theme"></button>
+        <button class="theme-dot" type="button" data-theme="graphite" aria-label="Graphite premium theme"></button>
+      </div>
+      <button class="presentation-button" type="button" id="pageFlipToggle">Page Flip</button>
+      <button class="print-button" type="button" id="printDeck">Print / Save PDF</button>
+    </header>
+    <div class="page-flip-controls" id="pageFlipControls" hidden data-print-hidden>
+      <button type="button" id="prevPage" aria-label="Previous presentation page">Prev</button>
+      <span id="pageFlipStatus">Page 1 / 1</span>
+      <button type="button" id="nextPage" aria-label="Next presentation page">Next</button>
+      <button type="button" id="exitPageFlip">Exit</button>
+    </div>
+
+    <main id="top">
+      <section class="hero-section" aria-labelledby="heroTitle">
+        <div class="hero-content reveal">
+          <div class="hero-text">
+            <p class="eyebrow">Builder Requirements Presentation</p>
+            <h1 id="heroTitle">Premium mixed-use residence with supermarket frontage</h1>
+            <p class="hero-copy">
+              A polished floor-by-floor design brief for a luxury private home with basement parking,
+              high ventilation, lift and staircase core, smart automation, refined interiors and coordinated services.
+            </p>
+            <div class="owner-contact" aria-label="Pavithran contact details">
+              <span>Owner Contact</span>
+              <a href="tel:+919940990428">+91 99409 90428</a>
+              <a href="mailto:pavithranvnktsh@gmail.com">pavithranvnktsh@gmail.com</a>
+            </div>
+            <div class="hero-actions" data-print-hidden>
+              <a class="primary-link" href="#floors">View Floor Brief</a>
+              <a class="secondary-link" href="#gallery">Open Reference Gallery</a>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="Luxury multi-level facade reference">
+            <div class="model-rig" aria-hidden="true">
+              <div class="model-plane plane-one"></div>
+              <div class="model-plane plane-two"></div>
+              <div class="model-plane plane-three"></div>
+              <div class="model-slab slab-one"></div>
+              <div class="model-slab slab-two"></div>
+              <div class="model-slab slab-three"></div>
+            </div>
+            <div class="hero-image-shell">
+              <img src="assets/references/elevation-6.jpg" alt="Luxury multi-level facade reference cropped to one side">
+            </div>
+            <div class="hero-note">
+              <span>Visual Direction</span>
+              <strong>Curved luxury facade, glass frontage, grand arrival and premium night lighting.</strong>
+            </div>
+          </div>
+        </div>
+        <div class="hero-facts reveal" aria-label="Project summary">
+          <span>Basement parking</span>
+          <span>Ground floor supermarket</span>
+          <span>Private residence above</span>
+          <span>Smart home enabled</span>
+        </div>
+      </section>
+
+      <section class="snapshot-band reveal" aria-labelledby="snapshotTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Brief Snapshot</p>
+          <h2 id="snapshotTitle">What the builder should understand first</h2>
+        </div>
+        <div class="snapshot-grid" id="snapshotGrid"></div>
+      </section>
+
+      <section class="render-lab-section reveal" id="rendering" aria-labelledby="renderingTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Pavithran Residence Concept</p>
+          <h2 id="renderingTitle">Luxury house vision, elevation language and plan deliverables</h2>
+        </div>
+        <div class="render-lab">
+          <div class="render-stage" aria-label="Animated house rendering concept">
+            <div class="render-frame">
+              <img src="assets/references/elevation-5.jpg" alt="Curved luxury elevation concept reference">
+              <div class="render-scan"></div>
+              <div class="render-gridlines"></div>
+              <canvas class="render-canvas" id="renderCanvas" aria-label="Live facade and plan rendering animation"></canvas>
+              <div class="render-label label-one">Custom facade pattern</div>
+              <div class="render-label label-two">Premium entry lighting</div>
+              <div class="render-label label-three">Vehicle drop-off focus</div>
+            </div>
+          </div>
+          <div class="plan-console">
+            <div class="console-header">
+              <span>2D / 3D Plan Deliverables</span>
+              <span>Required Before Quote Approval</span>
+            </div>
+            <svg class="plan-sketch" viewBox="0 0 560 360" role="img" aria-label="Animated 2D plan and elevation sketch lines">
+              <path class="draw-line line-a" d="M52 292 H510 V76 H328 V154 H220 V96 H52 Z"></path>
+              <path class="draw-line line-b" d="M92 244 H224 V154 H328 V244 H468"></path>
+              <path class="draw-line line-c" d="M138 292 V244 M224 292 V244 M328 292 V244 M420 292 V244"></path>
+              <path class="draw-line line-d" d="M76 76 C168 28 258 126 344 74 S468 86 504 42"></path>
+              <path class="draw-line line-e" d="M84 318 H196 M224 318 H340 M368 318 H504"></path>
+              <circle class="plan-node node-a" cx="138" cy="244" r="8"></circle>
+              <circle class="plan-node node-b" cx="328" cy="154" r="8"></circle>
+              <circle class="plan-node node-c" cx="468" cy="244" r="8"></circle>
+            </svg>
+            <div class="plan-requirements">
+              <span>Architectural 2D plans</span>
+              <span>3D views and walkthroughs</span>
+              <span>Detailed sketches for special areas</span>
+              <span>MEP, lighting and automation routes</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="elevation-section reveal" aria-labelledby="elevationTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Elevation + Theme Management</p>
+          <h2 id="elevationTitle">Unique exterior language with controlled material palette</h2>
+        </div>
+        <div class="elevation-grid" id="elevationGrid"></div>
+      </section>
+
+      <section class="intro-band reveal" id="intent">
+        <div class="section-heading">
+          <p class="eyebrow">Project Intent</p>
+          <h2>Luxury presentation, practical construction brief</h2>
+        </div>
+        <div class="intent-grid">
+          <figure class="image-panel">
+            <img src="assets/references/house-size.jpg" alt="Site size and road frontage plan reference">
+            <figcaption>Site and road frontage reference to be validated by the architect.</figcaption>
+          </figure>
+          <div class="intent-copy">
+            <p>
+              The building should combine a strong commercial frontage with a clearly separated private home entrance.
+              The residence should feel broad, bright, premium and easy to maintain, with every floor planned around daily
+              usability, ventilation, privacy and service access.
+            </p>
+            <div class="intent-list">
+              <div>
+                <h3>Architectural Direction</h3>
+                <p>Modern luxury elevation, broad approach, large porte cochere feel, garden edges and clean exterior lighting.</p>
+              </div>
+              <div>
+                <h3>Functional Direction</h3>
+                <p>Basement parking, lift and staircase connection, floor-wise storage, smart systems and maintenance-friendly services.</p>
+              </div>
+              <div>
+                <h3>Interior Direction</h3>
+                <p>Warm minimal palette, high ceilings where possible, marble/stone accents, concealed storage and refined lighting.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="experience-section reveal" aria-labelledby="experienceTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Experience Flow</p>
+          <h2 id="experienceTitle">From public frontage to private living</h2>
+        </div>
+        <div class="experience-track" id="experienceTrack"></div>
+      </section>
+
+      <section class="mood-section reveal" aria-labelledby="moodTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Design Mood</p>
+          <h2 id="moodTitle">Image-led references for the builder and architect</h2>
+        </div>
+        <div class="mood-grid" id="moodGrid"></div>
+      </section>
+
+      <section class="material-vision-section reveal" aria-labelledby="materialVisionTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Material + Light Vision</p>
+          <h2 id="materialVisionTitle">Natural lighting, higher broader spaces and calm matte finishes</h2>
+        </div>
+        <div class="material-vision-grid">
+          <article>
+            <span>01</span>
+            <h3>Natural lighting</h3>
+            <p>Prioritize larger openings, light wells, courtyard edges, skylights and soft indirect lighting so the home feels bright in the day and warm at night.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Higher and broader space</h3>
+            <p>Where structure and approval allow, use high ceilings, wider passages, generous lobbies and open family zones instead of tight room-by-room planning.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Matte premium look</h3>
+            <p>Use matte stone, satin metal, soft wood texture, muted wall finishes and concealed lighting so the house feels rich without glossy or loud finishes.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="creative-section reveal" aria-labelledby="creativeTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Creative Mindset</p>
+          <h2 id="creativeTitle">The house should feel imaginative, disciplined and builder-ready</h2>
+        </div>
+        <div class="creative-canvas">
+          <div class="creative-map" aria-hidden="true">
+            <span class="creative-line line-one"></span>
+            <span class="creative-line line-two"></span>
+            <span class="creative-line line-three"></span>
+            <span class="creative-node node-one"></span>
+            <span class="creative-node node-two"></span>
+            <span class="creative-node node-three"></span>
+          </div>
+          <article class="creative-card">
+            <span>01</span>
+            <h3>Creative but controlled</h3>
+            <p>The design can be bold and unique, but every curve, pattern, light strip and material change must connect to one approved theme.</p>
+          </article>
+          <article class="creative-card">
+            <span>02</span>
+            <h3>Furniture included in cost</h3>
+            <p>Built-in furniture, loose furniture, wardrobes, sofas, beds, dining, office furniture, outdoor seating and supermarket fixtures must be included in the cost plan.</p>
+          </article>
+          <article class="creative-card">
+            <span>03</span>
+            <h3>Rich natural experience</h3>
+            <p>Natural light, broader rooms, higher ceiling moments, matte finishes and warm indirect lighting should make the house feel calm, premium and spacious.</p>
+          </article>
+          <article class="creative-card">
+            <span>04</span>
+            <h3>Proof before execution</h3>
+            <p>Before work starts, the builder must provide drawings, material samples, furniture schedules, stage-wise cost and quality checkpoints for approval.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="floor-section" id="floors" aria-labelledby="floorTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Floor Scope</p>
+          <h2 id="floorTitle">Requirements by level</h2>
+        </div>
+        <div class="floor-stack" id="floorStack">
+          <article class="floor-block">
+            <figure class="floor-media">
+              <img src="assets/references/house-entrance-with-porte-cochere-4.jpg" alt="Ground floor entrance reference">
+              <figcaption>Ground floor arrival language with supermarket frontage and private house entry.</figcaption>
+            </figure>
+            <div class="floor-content">
+              <span class="floor-kicker">Ground Floor</span>
+              <h3>Commercial frontage and private arrival</h3>
+              <p>Supermarket frontage, secure private entry, biometric access, lift/stair core, reception, shoe storage and hidden washroom planning.</p>
+            </div>
+          </article>
+          <article class="floor-block">
+            <figure class="floor-media">
+              <img src="assets/references/basement-car-parking.jpg" alt="Basement parking reference">
+              <figcaption>Basement parking with durable floor, ventilation, lift and staircase access.</figcaption>
+            </figure>
+            <div class="floor-content">
+              <span class="floor-kicker">Basement</span>
+              <h3>Parking, wash bay and maintenance store</h3>
+              <p>Car parking, pressure washing bay, maintenance storage, small seating if possible and safe circulation to the house core.</p>
+            </div>
+          </article>
+          <article class="floor-block">
+            <figure class="floor-media">
+              <img src="assets/references/living-room.jpg" alt="First floor living reference">
+              <figcaption>Main family floor with large living, kitchen, pooja and smart home provisions.</figcaption>
+            </figure>
+            <div class="floor-content">
+              <span class="floor-kicker">First Floor</span>
+              <h3>Main family living and kitchen level</h3>
+              <p>High ceiling living, 100 inch TV, centralized sound, dry/wet kitchen, pantry, pooja, optional bedroom and automation.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="systems-section reveal" id="systems" aria-labelledby="systemsTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Integrated Systems</p>
+          <h2 id="systemsTitle">Items to coordinate during design development</h2>
+        </div>
+        <div class="systems-grid" id="systemsGrid"></div>
+      </section>
+
+      <section class="budget-section reveal" id="budget" aria-labelledby="budgetTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Cost + Quality Management</p>
+          <h2 id="budgetTitle">Builder must quote exact scope, including furniture, before starting work</h2>
+        </div>
+        <div class="budget-grid" id="budgetGrid"></div>
+      </section>
+
+      <section class="coordination-section reveal" aria-labelledby="coordinationTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Builder Coordination</p>
+          <h2 id="coordinationTitle">Information needed before final construction drawings</h2>
+        </div>
+        <div class="coordination-grid" id="coordinationGrid"></div>
+      </section>
+
+      <section class="gallery-section" id="gallery" aria-labelledby="galleryTitle">
+        <div class="section-heading">
+          <p class="eyebrow">Reference Gallery</p>
+          <h2 id="galleryTitle">Images placed by requirement area</h2>
+        </div>
+        <div class="gallery-toolbar" data-print-hidden>
+          <button class="filter-button is-active" type="button" data-filter="all">All</button>
+          <button class="filter-button" type="button" data-filter="exterior">Exterior</button>
+          <button class="filter-button" type="button" data-filter="ground">Ground</button>
+          <button class="filter-button" type="button" data-filter="basement">Basement</button>
+          <button class="filter-button" type="button" data-filter="first">First Floor</button>
+          <button class="filter-button" type="button" data-filter="second">Second Floor</button>
+          <button class="filter-button" type="button" data-filter="terrace">Terrace</button>
+          <button class="filter-button" type="button" data-filter="services">Services</button>
+        </div>
+        <div class="gallery-grid" id="galleryGrid">
+          <figure class="gallery-card" data-category="exterior">
+            <button type="button" data-src="assets/references/elevation-5.jpg" data-caption="Premium curved house elevation">
+              <img src="assets/references/elevation-5.jpg" alt="Premium curved house elevation" loading="lazy">
+            </button>
+            <figcaption>
+              <strong>Premium curved house elevation</strong>
+              <p>Use this as the direction for a unique facade with broad forms, luxury arrival and controlled matte exterior materials. It should inspire the architect, not be copied directly.</p>
+              <span class="vision-tags"><em>Unique elevation</em><em>Broad frontage</em><em>Matte exterior</em></span>
+              <span class="tag">Exterior</span>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="ground">
+            <button type="button" data-src="assets/references/house-entrance-with-porte-cochere-7.jpg" data-caption="Large covered entrance lighting">
+              <img src="assets/references/house-entrance-with-porte-cochere-7.jpg" alt="Large covered entrance lighting" loading="lazy">
+            </button>
+            <figcaption>
+              <strong>Large covered entrance lighting</strong>
+              <p>This explains the grand entry feeling: a broad protected arrival, premium lighting, vehicle drop-off and a stronger first impression for the private house entrance.</p>
+              <span class="vision-tags"><em>Private arrival</em><em>Warm lighting</em><em>Broader space</em></span>
+              <span class="tag">Ground Floor</span>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="basement">
+            <button type="button" data-src="assets/references/basement-car-parking-2.jpg" data-caption="Basement parking with seating view">
+              <img src="assets/references/basement-car-parking-2.jpg" alt="Basement parking with seating view" loading="lazy">
+            </button>
+            <figcaption>
+              <strong>Basement parking with seating view</strong>
+              <p>The basement should feel organized and premium, not dark or unfinished. Plan ventilation, matte durable flooring, warm lighting and a small waiting area if space allows.</p>
+              <span class="vision-tags"><em>Ventilation</em><em>Durable flooring</em><em>Comfort corner</em></span>
+              <span class="tag">Basement</span>
+            </figcaption>
+          </figure>
+          <figure class="gallery-card" data-category="first">
+            <button type="button" data-src="assets/references/living-room.jpg" data-caption="High ceiling living reference">
+              <img src="assets/references/living-room.jpg" alt="High ceiling living reference" loading="lazy">
+            </button>
+            <figcaption>
+              <strong>High ceiling living reference</strong>
+              <p>This is the main living vision: natural light, higher ceiling, broad seating, open family movement and calm matte finishes that feel rich but not glossy.</p>
+              <span class="vision-tags"><em>Natural light</em><em>High ceiling</em><em>Matte finish</em></span>
+              <span class="tag">First Floor</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="lightbox" id="lightbox">
+      <button class="lightbox-close" type="button" id="closeLightbox" aria-label="Close image preview">Close</button>
+      <img id="lightboxImage" src="" alt="">
+      <p id="lightboxCaption"></p>
+    </dialog>
+
+    <footer class="footer">
+      <div>
+        <p>Prepared as a visual requirements brief for builder and architect coordination.</p>
+        <p>All images are reference inspirations and final design must be validated with site measurements, structure, approvals and budget.</p>
+      </div>
+      <div class="footer-contact">
+        <span>Pavithran</span>
+        <a href="tel:+919940990428">+91 99409 90428</a>
+        <a href="mailto:pavithranvnktsh@gmail.com">pavithranvnktsh@gmail.com</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
