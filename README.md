@@ -37,6 +37,16 @@ Use the `Print / Save PDF` button in the top-right corner of the presentation, t
 
 This is a static site, so it can be hosted with GitHub Pages or any static hosting service by publishing the repository root.
 
+## Deploy on AWS S3 + CloudFront
+
+This repo now includes a GitHub Actions deployment pipeline in `.github/workflows/deploy-aws-static-site.yml`.
+
+The action uses the IAM role `arn:aws:iam::182460208211:role/pavithran-personal-github-actions`, creates the Terraform state bucket, provisions a private S3 website bucket, attaches it to CloudFront through Origin Access Control, uploads the website files and invalidates the CloudFront cache.
+
+AWS resources can create charges. S3 and CloudFront are normally low cost for a small static website, but they are not guaranteed free like GitHub Pages. Check AWS Billing and set a billing alert before running production traffic.
+
+See `infra/README.md` for the required GitHub OIDC trust policy and role permissions.
+
 ## Files
 
 - `index.html` - presentation structure

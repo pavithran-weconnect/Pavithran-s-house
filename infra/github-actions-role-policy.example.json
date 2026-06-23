@@ -1,0 +1,41 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowIdentityCheck",
+      "Effect": "Allow",
+      "Action": "sts:GetCallerIdentity",
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowTerraformStateBucketManagement",
+      "Effect": "Allow",
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::pavithran-house-tfstate-182460208211",
+        "arn:aws:s3:::pavithran-house-tfstate-182460208211/*"
+      ]
+    },
+    {
+      "Sid": "AllowWebsiteBucketManagement",
+      "Effect": "Allow",
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::pavithran-house-website-182460208211",
+        "arn:aws:s3:::pavithran-house-website-182460208211/*"
+      ]
+    },
+    {
+      "Sid": "AllowCloudFrontManagement",
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

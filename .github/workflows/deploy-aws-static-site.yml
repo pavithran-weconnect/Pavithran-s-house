@@ -1,0 +1,133 @@
+name: Deploy AWS static website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  AWS_REGION: ap-south-1
+  AWS_ROLE_TO_ASSUME: arn:aws:iam::182460208211:role/pavithran-personal-github-actions
+  TF_STATE_BUCKET: pavithran-house-tfstate-182460208211
+  TF_STATE_KEY: pavithran-house/terraform.tfstate
+  TF_VAR_project_name: pavithran-house
+  TF_VAR_aws_region: ap-south-1
+  TF_VAR_website_bucket_name: pavithran-house-website-182460208211
+
+jobs:
+  deploy:
+    name: Provision and publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Bootstrap Terraform state bucket
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if aws s3api head-bucket --bucket "${TF_STATE_BUCKET}" 2>/dev/null; then
+            echo "Terraform state bucket already exists: ${TF_STATE_BUCKET}"
+          else
+            echo "Creating Terraform state bucket: ${TF_STATE_BUCKET}"
+            if [ "${AWS_REGION}" = "us-east-1" ]; then
+              aws s3api create-bucket --bucket "${TF_STATE_BUCKET}"
+            else
+              aws s3api create-bucket \
+                --bucket "${TF_STATE_BUCKET}" \
+                --region "${AWS_REGION}" \
+                --create-bucket-configuration LocationConstraint="${AWS_REGION}"
+            fi
+          fi
+
+          aws s3api put-public-access-block \
+            --bucket "${TF_STATE_BUCKET}" \
+            --public-access-block-configuration \
+            BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+
+          aws s3api put-bucket-versioning \
+            --bucket "${TF_STATE_BUCKET}" \
+            --versioning-configuration Status=Enabled
+
+          aws s3api put-bucket-encryption \
+            --bucket "${TF_STATE_BUCKET}" \
+            --server-side-encryption-configuration \
+            '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.10.5
+          terraform_wrapper: false
+
+      - name: Terraform fmt
+        run: terraform -chdir=infra/terraform fmt -check
+
+      - name: Terraform init
+        run: |
+          terraform -chdir=infra/terraform init \
+            -backend-config="bucket=${TF_STATE_BUCKET}" \
+            -backend-config="key=${TF_STATE_KEY}" \
+            -backend-config="region=${AWS_REGION}" \
+            -backend-config="encrypt=true"
+
+      - name: Terraform validate
+        run: terraform -chdir=infra/terraform validate
+
+      - name: Terraform apply
+        run: terraform -chdir=infra/terraform apply -auto-approve
+
+      - name: Read Terraform outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "WEBSITE_BUCKET=$(terraform -chdir=infra/terraform output -raw website_bucket_name)"
+            echo "CLOUDFRONT_DISTRIBUTION_ID=$(terraform -chdir=infra/terraform output -raw cloudfront_distribution_id)"
+            echo "CLOUDFRONT_DOMAIN=$(terraform -chdir=infra/terraform output -raw cloudfront_domain_name)"
+          } >> "${GITHUB_ENV}"
+
+      - name: Upload static files to S3
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          aws s3 sync assets/ "s3://${WEBSITE_BUCKET}/assets/" \
+            --delete \
+            --cache-control "public,max-age=31536000,immutable"
+
+          aws s3 cp index.html "s3://${WEBSITE_BUCKET}/index.html" \
+            --cache-control "no-cache,no-store,must-revalidate" \
+            --content-type "text/html"
+
+          aws s3 cp styles.css "s3://${WEBSITE_BUCKET}/styles.css" \
+            --cache-control "public,max-age=300" \
+            --content-type "text/css"
+
+          aws s3 cp script.js "s3://${WEBSITE_BUCKET}/script.js" \
+            --cache-control "public,max-age=300" \
+            --content-type "application/javascript"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
+            --paths "/*"
+
+      - name: Deployment URL
+        run: |
+          echo "Website URL: https://${CLOUDFRONT_DOMAIN}"
+
