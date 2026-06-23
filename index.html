@@ -8,9 +8,32 @@
       name="description"
       content="Builder requirements presentation for Pavithran's House: supermarket frontage, private residence, basement parking, smart home systems, interiors, terrace and services."
     >
+    <script>
+      document.documentElement.classList.add("js-loading");
+      window.setTimeout(() => document.documentElement.classList.remove("js-loading"), 8000);
+    </script>
+    <link rel="preload" as="image" href="assets/references/elevation-6.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/references/elevation-5.jpg">
+    <link rel="preload" as="image" href="assets/references/living-room.jpg">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <div class="site-preloader" id="sitePreloader" role="status" aria-live="polite" data-print-hidden>
+      <div class="preloader-panel">
+        <span class="preloader-brand">PH</span>
+        <p class="eyebrow">Preparing Pavithran's House</p>
+        <h2>Loading design boards, floor sections and reference images</h2>
+        <div class="preloader-visual" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="preloader-progress" aria-hidden="true">
+          <span id="preloaderProgressBar"></span>
+        </div>
+        <p class="preloader-status" id="preloaderStatus">Warming key visuals 0%</p>
+      </div>
+    </div>
     <div class="ambient-lines" aria-hidden="true"></div>
     <div class="scroll-progress" id="scrollProgress" data-print-hidden></div>
     <header class="site-header" data-print-hidden>
@@ -71,7 +94,13 @@
               <div class="model-slab slab-three"></div>
             </div>
             <div class="hero-image-shell">
-              <img src="assets/references/elevation-6.jpg" alt="Luxury multi-level facade reference cropped to one side">
+              <img
+                src="assets/references/elevation-6.jpg"
+                alt="Luxury multi-level facade reference cropped to one side"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+              >
             </div>
             <div class="hero-note">
               <span>Visual Direction</span>
@@ -103,7 +132,7 @@
         <div class="render-lab">
           <div class="render-stage" aria-label="Animated house rendering concept">
             <div class="render-frame">
-              <img src="assets/references/elevation-5.jpg" alt="Curved luxury elevation concept reference">
+              <img src="assets/references/elevation-5.jpg" alt="Curved luxury elevation concept reference" decoding="async">
               <div class="render-scan"></div>
               <div class="render-gridlines"></div>
               <canvas class="render-canvas" id="renderCanvas" aria-label="Live facade and plan rendering animation"></canvas>
@@ -152,7 +181,7 @@
         </div>
         <div class="intent-grid">
           <figure class="image-panel">
-            <img src="assets/references/house-size.jpg" alt="Site size and road frontage plan reference">
+            <img src="assets/references/house-size.jpg" alt="Site size and road frontage plan reference" loading="lazy" decoding="async">
             <figcaption>Site and road frontage reference to be validated by the architect.</figcaption>
           </figure>
           <div class="intent-copy">

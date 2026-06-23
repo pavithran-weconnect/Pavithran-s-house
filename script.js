@@ -640,7 +640,7 @@ function renderMood() {
     .map(
       (item) => `
         <figure class="mood-card">
-          <img src="${item.src}" alt="${item.caption}" loading="lazy">
+          <img src="${item.src}" alt="${item.caption}" loading="lazy" decoding="async">
           <figcaption>${item.caption}</figcaption>
         </figure>
       `,
@@ -709,7 +709,7 @@ function renderFloors() {
       (section) => `
         <article class="floor-block">
           <figure class="floor-media">
-            <img src="${section.hero}" alt="${section.heroAlt}" loading="lazy">
+            <img src="${section.hero}" alt="${section.heroAlt}" loading="lazy" decoding="async">
             <figcaption>${section.heroCaption}</figcaption>
           </figure>
           <div class="floor-content">
@@ -743,7 +743,7 @@ function renderFloors() {
                     const detail = detailForImage(src, caption, category);
                     return `
                     <button type="button" data-src="${src}" data-caption="${caption}" data-detail="${detail}">
-                      <img src="${asset(file)}" alt="${caption}" loading="lazy">
+                      <img src="${asset(file)}" alt="${caption}" loading="lazy" decoding="async">
                       <span class="reference-overlay">${caption}</span>
                     </button>
                   `;
@@ -822,7 +822,7 @@ function renderGallery(filter = "all") {
       return `
         <figure class="gallery-card" data-category="${item.category}">
           <button type="button" data-src="${item.src}" data-caption="${item.caption}" data-detail="${detail}">
-            <img src="${item.src}" alt="${item.caption}" loading="lazy">
+            <img src="${item.src}" alt="${item.caption}" loading="lazy" decoding="async">
             <span class="image-sweep"></span>
           </button>
           <figcaption>
@@ -1268,21 +1268,212 @@ function setupPageFlip() {
   updateSpread();
 }
 
-renderSnapshots();
-renderExperience();
-renderElevationControls();
-renderMood();
-renderFloors();
-renderSystems();
-renderBudget();
-renderCoordination();
-renderGallery();
-setupFilters();
-setupLightbox();
-setupPrint();
-setupThemes();
-setupRealtimeCanvas();
-setupRevealAnimation();
-setupScrollProgress();
-setupPremiumInteractions();
-setupPageFlip();
+function uniqueSources(sources) {
+  return [...new Set(sources.filter(Boolean))];
+}
+
+function delay(ms) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+function allReferenceImageSources() {
+  return uniqueSources([
+    asset("elevation-6.jpg"),
+    asset("elevation-5.jpg"),
+    asset("house-size.jpg"),
+    ...moodImages.map((item) => item.src),
+    ...floorSections.map((section) => section.hero),
+    ...floorSections.flatMap((section) => section.references.map(([file]) => asset(file))),
+    ...galleryItems.map((item) => item.src),
+  ]);
+}
+
+function criticalImageSources() {
+  return uniqueSources([
+    asset("elevation-6.jpg"),
+    asset("elevation-5.jpg"),
+    asset("living-room.jpg"),
+    asset("house-size.jpg"),
+    asset("house-entrance-with-porte-cochere-4.jpg"),
+    asset("basement-car-parking.jpg"),
+    ...moodImages.map((item) => item.src),
+    ...floorSections.slice(0, 4).map((section) => section.hero),
+    ...galleryItems.slice(0, 12).map((item) => item.src),
+  ]);
+}
+
+function createPreloaderController() {
+  const root = document.querySelector("#sitePreloader");
+  const bar = document.querySelector("#preloaderProgressBar");
+  const status = document.querySelector("#preloaderStatus");
+  let total = 0;
+
+  const setProgress = (completed, count) => {
+    total = count || total || 1;
+    const percentage = Math.min(100, Math.round((completed / total) * 100));
+    if (bar) {
+      bar.style.width = `${percentage}%`;
+    }
+    if (status) {
+      status.textContent = percentage >= 100 ? "Opening presentation" : `Warming key visuals ${percentage}%`;
+    }
+  };
+
+  return {
+    root,
+    setTotal(count) {
+      total = Math.max(1, count);
+      setProgress(0, total);
+    },
+    update(completed, count) {
+      setProgress(completed, count);
+    },
+    complete() {
+      setProgress(1, 1);
+    },
+  };
+}
+
+function loadImageSource(src, timeout = 6500, priority = "auto") {
+  return new Promise((resolve) => {
+    const image = new Image();
+    let settled = false;
+    let timer = 0;
+
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      resolve(src);
+    };
+
+    timer = window.setTimeout(finish, timeout);
+    image.decoding = "async";
+    if ("fetchPriority" in image) {
+      image.fetchPriority = priority;
+    }
+    image.onload = () => {
+      if (image.decode) {
+        image.decode().catch(() => undefined).finally(finish);
+        return;
+      }
+      finish();
+    };
+    image.onerror = finish;
+    image.src = src;
+
+    if (image.complete) {
+      image.onload();
+    }
+  });
+}
+
+async function preloadImages(sources, options = {}) {
+  const queue = uniqueSources(sources);
+  const concurrency = Math.max(1, Math.min(options.concurrency || 4, queue.length || 1));
+  const controller = options.controller;
+  const timeout = options.timeout || 6500;
+  const priority = options.priority || "auto";
+  let nextIndex = 0;
+  let completed = 0;
+
+  if (controller) {
+    controller.setTotal(queue.length);
+  }
+
+  if (queue.length === 0) {
+    if (controller) controller.complete();
+    return;
+  }
+
+  const worker = async () => {
+    while (nextIndex < queue.length) {
+      const src = queue[nextIndex];
+      nextIndex += 1;
+      await loadImageSource(src, timeout, priority);
+      completed += 1;
+      if (controller) {
+        controller.update(completed, queue.length);
+      }
+    }
+  };
+
+  await Promise.all(Array.from({ length: concurrency }, worker));
+}
+
+function revealPresentation(preloader) {
+  if (preloader) {
+    preloader.complete();
+  }
+  document.documentElement.classList.remove("js-loading");
+  document.documentElement.classList.add("js-ready");
+
+  window.setTimeout(() => {
+    if (preloader && preloader.root) {
+      preloader.root.remove();
+    }
+    document.documentElement.classList.remove("js-ready");
+  }, 720);
+}
+
+function warmRemainingImages(alreadyRequested) {
+  const requested = new Set(alreadyRequested);
+  const remaining = allReferenceImageSources().filter((src) => !requested.has(src));
+  const schedule = window.requestIdleCallback
+    ? (callback) => window.requestIdleCallback(callback, { timeout: 2500 })
+    : (callback) => window.setTimeout(callback, 900);
+
+  schedule(() => {
+    preloadImages(remaining, { concurrency: 2, timeout: 4800 }).catch(() => undefined);
+  });
+}
+
+function renderPresentationContent() {
+  renderSnapshots();
+  renderExperience();
+  renderElevationControls();
+  renderMood();
+  renderFloors();
+  renderSystems();
+  renderBudget();
+  renderCoordination();
+  renderGallery();
+}
+
+function setupPresentationInteractions() {
+  setupFilters();
+  setupLightbox();
+  setupPrint();
+  setupThemes();
+  setupRealtimeCanvas();
+  setupRevealAnimation();
+  setupScrollProgress();
+  setupPremiumInteractions();
+  setupPageFlip();
+}
+
+async function initializePresentation() {
+  const preloader = createPreloaderController();
+  const criticalSources = criticalImageSources();
+  const criticalLoad = preloadImages(criticalSources, {
+    controller: preloader,
+    concurrency: 5,
+    timeout: 5200,
+    priority: "high",
+  });
+
+  renderPresentationContent();
+  setupPresentationInteractions();
+
+  await Promise.all([Promise.race([criticalLoad, delay(5200)]), delay(750)]);
+  revealPresentation(preloader);
+  warmRemainingImages(criticalSources);
+}
+
+initializePresentation().catch(() => {
+  renderPresentationContent();
+  setupPresentationInteractions();
+  revealPresentation(createPreloaderController());
+});
